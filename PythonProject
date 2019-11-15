@@ -1,0 +1,247 @@
+#Titatnic
+#Predicting whether the passenger is survived or not using Titanic Dataset from kaggle.
+
+import pandas as pd
+from pandas import DataFrame as mydata
+mydata=pd.read_csv('train.csv')
+print(mydata.columns)
+del mydata['PassengerId']
+#print(mydata.isnull().sum())
+mydata.fillna(mydata.mean(),inplace=True)#Replacing NULL value with Mean.
+#print(mydata.isnull().sum())
+Titanic_train=mydata.copy()
+Titanic_train.head()
+
+#We Understand the no of people survived.
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from scipy import stats
+%matplotlib inline 
+from scipy import stats
+from scipy.stats import chi2
+from statsmodels.graphics.mosaicplot import mosaic
+plt.rcParams['font.size'] = 16.0
+
+
+print(Titanic_train['Survived'].count())
+print(Titanic_train['Survived'].value_counts())
+print((Titanic_train['Survived'].value_counts())/(Titanic_train['Survived'].count()))
+print((Titanic_train['Survived'].value_counts())/(Titanic_train['Survived'].count())*100)
+
+sns.countplot(x='Survived',data=Titanic_train)
+plt.show()
+#plt.savefig('Survived.png')
+#we understand the no of peoples in different passengerclass
+print(Titanic_train['Pclass'].count())
+print(Titanic_train['Pclass'].value_counts())
+print((Titanic_train['Pclass'].value_counts())/(Titanic_train['Pclass'].count()))
+print((Titanic_train['Pclass'].value_counts())/(Titanic_train['Pclass'].count())*100)
+
+sns.countplot(x='Pclass',data=Titanic_train)
+plt.show()
+#plt.savefig('Pclass.png')
+
+#We Understand the no of peoples with different gender
+print(Titanic_train['Sex'].count())
+print(Titanic_train['Sex'].value_counts())
+print((Titanic_train['Sex'].value_counts())/(Titanic_train['Sex'].count()))
+print((Titanic_train['Sex'].value_counts())/(Titanic_train['Sex'].count())*100)
+
+sns.countplot(x='Sex',data=Titanic_train)
+plt.show()
+#plt.savefig('Sex.png')
+
+print(Titanic_train['Embarked'].count())
+print(Titanic_train['Embarked'].value_counts())
+print((Titanic_train['Embarked'].value_counts())/(Titanic_train['Embarked'].count()))
+print((Titanic_train['Embarked'].value_counts())/(Titanic_train['Embarked'].count())*100)
+
+sns.countplot(x='Embarked',data=Titanic_train)
+plt.show()
+plt.savefig('Embarked.png')
+
+
+print(Titanic_train['Age'].count())
+print(Titanic_train['Age'].max())
+print(Titanic_train['Age'].min())
+print(Titanic_train['Age'].max()- Titanic_train['Age'].min())
+print(Titanic_train['Age'].mean())
+print(np.round(Titanic_train['Age'].mean(),2))
+
+plt.hist(Titanic_train['Age'])
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('AgeHist.png')
+
+plt.boxplot(Titanic_train['Age'])
+#plt.yticks(range(1, 22))
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('Age_Box.png')
+
+print(Titanic_train['SibSp'].count())
+print(Titanic_train['SibSp'].max())
+print(Titanic_train['SibSp'].min())
+print(Titanic_train['SibSp'].max()- Titanic_train['SibSp'].min())
+print(Titanic_train['SibSp'].mean())
+print(np.round(Titanic_train['SibSp'].mean(),2))
+
+plt.hist(Titanic_train['SibSp'])
+plt.xlabel("SibSp")
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('SibSpHist.png')
+
+plt.boxplot(Titanic_train['SibSp'])
+#plt.yticks(range(1, 22))
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('SibSp_Box.png')
+
+print(Titanic_train['Parch'].count())
+print(Titanic_train['Parch'].max())
+print(Titanic_train['Parch'].min())
+print(Titanic_train['Parch'].max()- Titanic_train['Parch'].min())
+print(Titanic_train['Parch'].mean())
+print(np.round(Titanic_train['Parch'].mean(),2))
+
+plt.hist(Titanic_train['Parch'])
+plt.xlabel("Parch")
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('ParchHist.png')
+
+plt.boxplot(Titanic_train['Parch'])
+#plt.yticks(range(1, 22))
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('Parch_Box.png')
+
+print(Titanic_train['Fare'].count())
+print(Titanic_train['Fare'].max())
+print(Titanic_train['Fare'].min())
+print(Titanic_train['Fare'].max()- Titanic_train['Fare'].min())
+print(Titanic_train['Fare'].mean())
+print(np.round(Titanic_train['Fare'].mean(),2))
+
+plt.hist(Titanic_train['Fare'])
+plt.xlabel("Fare")
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('FareHist.png')
+
+plt.boxplot(Titanic_train['Fare'])
+#plt.yticks(range(1, 22))
+plt.ylabel("Frequency")
+plt.show()
+plt.savefig('Fare_Box.png')
+
+
+mosaic(Titanic_train, ['Survived','Pclass'])
+plt.show()
+#People survived in large amount from 1st class then 3rd class and lastly from 2nd class
+
+mosaic(Titanic_train, ['Survived','Sex'])
+plt.show()
+#Survived male are less in no as compared to female
+
+mosaic(Titanic_train, ['Survived','Embarked'])
+plt.show()
+#C = Cherbourg, Q = Queenstown, S = Southampton
+#Peoples are survived in following order
+#S>C>Q
+
+sns.swarmplot(x='Survived',y='Age',data=Titanic_train)
+plt.show()
+
+sns.swarmplot(x='Survived',y='SibSp',data=Titanic_train)
+plt.show()
+
+sns.swarmplot(x='Survived',y='Parch',data=Titanic_train)
+plt.show()
+
+sns.swarmplot(x='Survived',y='Fare',data=Titanic_train)
+plt.show()
+
+#from sklearn.model_selection import train_test_split
+#from sklearn.preprocessing import MinMaxScaler
+#scaler = MinMaxScaler()
+import pandas as pd
+mydata1=pd.read_csv('test.csv')
+#print(mydata.isnull().sum())
+mydata1.fillna(mydata1.mean(),inplace=True)#Replacing NULL value with Mean.
+#print(mydata.isnull().sum())
+Titanic_test=mydata1.copy()
+#Titanic_test.head()
+y =Titanic_train['Survived']
+features=["Pclass","Age","Sex","SibSp","Parch","Fare","Embarked"]
+X =pd.get_dummies(Titanic_train[features])
+
+#X_train, X_test, y_train, y_test = train_test_split(X,y, train_size = 0.66,
+#                                       test_size = 0.34, random_state = 0)
+#print(X_train.shape,X_test.shape,y_train.shape,y_test.shape)
+
+
+from sklearn.linear_model import LogisticRegression
+X_test=pd.get_dummies(Titanic_test[features])
+log_mod = LogisticRegression().fit(X,y)
+print('Accuracy of Logistic regression   classifier on training set: {:.4f}'
+        .format(log_mod.score(X,y)))
+predictions=log_mod.predict(X_test)
+
+output = pd.DataFrame({'PassengerId':Titanic_test.PassengerId,'Survived':predictions})
+#output.to_csv('SB_submission.csv',index=False)
+#print('Accuracy of Logistic regression classifier on test set: {:.4f}'
+#        .format(log_mod.score(y)))
+
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+mydata1=pd.read_csv('test.csv')
+#print(mydata.isnull().sum())
+mydata1.fillna(mydata1.mean(),inplace=True)#Replacing NULL value with Mean.
+#print(mydata.isnull().sum())
+Titanic_test=mydata1.copy()
+#Titanic_test.head()
+y =Titanic_train['Survived']
+features=["Pclass","Age","Sex","Fare"]
+X =pd.get_dummies(Titanic_train[features])
+
+X_test=pd.get_dummies(Titanic_test[features])
+
+model=RandomForestClassifier(n_estimators=100,max_depth=5,random_state=1)
+model.fit(X,y)
+
+print('Accuracy of RandomForest classifier on training set: {:.4f}'
+        .format(model.score(X,y)))
+
+predictions=model.predict(X_test)
+print(predictions)
+
+output = pd.DataFrame({'PassengerId':Titanic_test.PassengerId,'Survived':predictions})
+#output.to_csv('SB_submission2.csv',index=False)
+
+output = pd.DataFrame({'PassengerId':Titanic_test.PassengerId,'Survived':predictions,
+                       'Pclass':Titanic_test.Pclass,'Name':Titanic_test.Name,'Sex':Titanic_test.Sex,
+                       'Age':Titanic_test.Age,'SibSp':Titanic_test.SibSp,'Parch':Titanic_test.Parch,
+                       'Ticket':Titanic_test.Ticket,'Fare':Titanic_test.Fare,'Cabin':Titanic_test.Cabin,
+                       'Embarked':Titanic_test.Embarked})
+output.to_csv('test1.csv',index=False)
+
+
+mydata2=pd.read_csv('test1.csv')
+#print(mydata.isnull().sum())
+mydata2.fillna(mydata1.mean(),inplace=True)#Replacing NULL value with Mean.
+#print(mydata.isnull().sum())
+mydata2.head()
+Titanic_test1=mydata2.copy()
+y1 =Titanic_test1['Survived']
+features1=["Pclass","Age","Sex","Fare"]
+X1 =pd.get_dummies(Titanic_test1[features1])
+
+print('Accuracy of RandomForest classifier on testing set: {:.4f}'
+        .format(model.score(X1,y1)))
+
+
+
